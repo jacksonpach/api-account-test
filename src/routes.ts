@@ -15,3 +15,9 @@ router.get('/balance', (request, response) => {
         account.getBalance(request, response)
     }
 )
+
+router.post('/event', (request, response) => {
+        const account = new Account()
+        account.getEvent(request, response)
+    }
+)
