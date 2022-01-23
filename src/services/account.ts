@@ -1,25 +1,41 @@
 import Storage from "../storage/storage";
+import Account from "../controllers/acccount";
+import AccountEntity from "../entities/account"
+
+interface IResponse {
+    destination: {
+        id: number,
+        balance: number
+    }
+}
 
 class AccountService {
     async createAccount(data) {
-        let storage = new Storage();
-        const {destination, amount} = data
+        const dataAccount = new AccountEntity(data)
+        const idAccount = dataAccount.getId()
+        const storage = new Storage();
 
-        const dataObj =
-            {
-                destination: {
-                    id: destination,
-                    balance: amount
-                }
-            }
-        await storage.set('account', dataObj)
-        const res = await storage.get('account')
-        return this.getBalance(res)
+        await storage.set('account_'+idAccount,dataAccount)
+        return await this.getBalance(idAccount)
     }
 
-    getBalance(res) {
-        console.log(res)
-        return res
+    async getBalance(idAccount) {
+        const storage = new Storage();
+        const dataAccount = await storage.get('account_'+idAccount)
+
+        return this.getResponseBalance(dataAccount)
+    }
+
+    getResponseBalance(dataAccount){
+        let response: IResponse;
+
+        response = {
+            destination:  {
+                id: dataAccount.id,
+                balance: dataAccount.amount
+            }
+        }
+        return response
     }
 }
 

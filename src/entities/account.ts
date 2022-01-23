@@ -1,25 +1,45 @@
-class Account {
-
-    private _id: number;
-    private _amount: number;
+class AccountEntity {
+    private id
+    private amount
+    private type
+    private destination
 
     constructor(obj) {
-        this._id = 0
-        this._amount = 0;
+        this.id = "100";
+        this.amount = 0;
+        this.type = '';
+        this.destination = 0;
+
+        if (obj) {
+            Object.assign(this, obj);
+        }
+    }
+    setId(id) {
+        this.id = id;
+    }
+    getId() {
+        return this.id;
+    }
+    setType(type) {
+        this.type = type;
+    }
+    getType() {
+        return this.type;
     }
 
-    get id(): number {
-        return this._id;
+    setDestination(destination) {
+        this.destination = destination;
     }
-    set id(value: number) {
-        this._id = value;
-    }
-
-    get amount(): number {
-        return this._amount;
+    getDestination() {
+        return this.destination;
     }
 
-    set amount(value: number) {
-        this._amount = value;
+    setAmount(amount) {
+        this.amount = amount;
     }
+    getAmount() {
+        return this.amount;
+    }
+
 }
+export default AccountEntity

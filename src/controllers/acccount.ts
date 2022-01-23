@@ -14,10 +14,11 @@ class Account {
         }
     }
 
-    getEvent = (request: Request, response: Response) => {
+    async getEvent(request: Request, response: Response) {
         const data = request.body
-        if (data.type === 'deposit') {
-            const responseData = this.deposit(data)
+        if (data.type == 'deposit') {
+            const responseData = await this.deposit(data)
+            console.log(responseData)
             return response.status(201).json(responseData)
         } else {
             return response.status(404).json('no')
@@ -27,11 +28,9 @@ class Account {
 
     async deposit(data) {
         const service = new AccountService
-        // if(data.id === 1) {
-        //
-        // }
         let response = await service.createAccount(data)
         console.log(response)
+        return response
     }
 }
 
