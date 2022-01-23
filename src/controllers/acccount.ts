@@ -1,4 +1,5 @@
 import {Request, Response} from "express"
+import AccountService from "../services/account";
 
 class Account {
 
@@ -25,10 +26,12 @@ class Account {
     }
 
     deposit = (data) => {
-        const bodyRes = {
-            "destination": {"id": "100", "balance": 10}
-        }
-        return bodyRes
+        const service = new AccountService
+        // if(data.id === 1) {
+        //
+        // }
+
+        return  service.createAccount(data)
     }
 }
 
