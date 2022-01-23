@@ -25,13 +25,13 @@ class Account {
 
     }
 
-    deposit = (data) => {
+    async deposit(data) {
         const service = new AccountService
         // if(data.id === 1) {
         //
         // }
-
-        return  service.createAccount(data)
+        let response = await service.createAccount(data)
+        console.log(response)
     }
 }
 

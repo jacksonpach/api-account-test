@@ -1,15 +1,25 @@
 import Storage from "../storage/storage";
 
 class AccountService {
-    createAccount(data){
+    async createAccount(data) {
         let storage = new Storage();
-        storage.set('account', data)
-        return {"destination": {"id":"100", "balance":10}}
+        const {destination, amount} = data
+
+        const dataObj =
+            {
+                destination: {
+                    id: destination,
+                    balance: amount
+                }
+            }
+        await storage.set('account', dataObj)
+        const res = await storage.get('account')
+        return this.getBalance(res)
     }
 
-    getBalance(id) {
-        let storage = new Storage();
-
+    getBalance(res) {
+        console.log(res)
+        return res
     }
 }
 

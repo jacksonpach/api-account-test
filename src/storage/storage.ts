@@ -15,8 +15,12 @@ class Storage {
     }
 
     async get(name) {
-        let data = await this.redis.get(name)
-        return JSON.parse(data);
+        try {
+            let data = await this.redis.get(name)
+            return JSON.parse(data);
+        } catch (e) {
+            return JSON.parse('');
+        }
     }
 }
 
