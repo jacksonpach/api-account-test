@@ -33,6 +33,15 @@ class AccountService {
         }
     }
 
+    async transfer(data: IEvent) {
+        let result = await this.existAccount(data.origin)
+        if (result === null) {
+            return false
+        } else {
+            return await this.withDrawAccount(data)
+        }
+    }
+
     async getBalance(idAccount) {
         const storage = new Storage();
         const dataAccount = await storage.get('account_' + idAccount)
@@ -40,7 +49,7 @@ class AccountService {
         return this.getResponseBalanceDestination(dataAccount)
     }
 
-    async createAccount(data: IEvent) {
+    private async createAccount(data: IEvent) {
         const dataAccount = new AccountEntity(data, data.destination)
         const idAccount = dataAccount.getId()
         const storage = new Storage();
@@ -49,7 +58,7 @@ class AccountService {
         return this.getResponseBalanceDestination(dataAccount)
     }
 
-    async addAccount(data: IEvent) {
+    private async addAccount(data: IEvent) {
         const account = new AccountEntity(data, data.destination)
         account.setAmount(data.amount + account.getAmount())
         const idAccount = account.getId()
@@ -59,7 +68,7 @@ class AccountService {
         return this.getResponseBalanceDestination(account)
     }
 
-    async withDrawAccount(data: IEvent) {
+    private async withDrawAccount(data: IEvent) {
         const storage = new Storage();
         const accountData = await storage.get('account_' + data.origin)
         const account = new AccountEntity(accountData, data.origin)
@@ -69,7 +78,7 @@ class AccountService {
         return this.getResponseBalanceOrigin(account)
     }
 
-    async transferAccount(data: IEvent) {
+    private async transferAccount(data: IEvent) {
         const storage = new Storage();
         const accountOriginData = await storage.get('account_' + data.origin)
         const accountDestinationData = await storage.get('account_' + data.destination)
@@ -80,12 +89,12 @@ class AccountService {
 
     }
 
-    async existAccount(idAccount) {
+    private async existAccount(idAccount) {
         const storage = new Storage();
         return await storage.get('account_' + idAccount)
     }
 
-    getResponseBalanceDestination(dataAccount) {
+    private getResponseBalanceDestination(dataAccount) {
         let response: IResponseBalanceDestination;
         response = {
             destination: {
@@ -96,7 +105,7 @@ class AccountService {
         return response
     }
 
-    getResponseBalanceOrigin(dataAccount) {
+    private getResponseBalanceOrigin(dataAccount) {
         let response: IResponseBalanceOrigin;
         response = {
             origin: {
@@ -107,7 +116,7 @@ class AccountService {
         return response
     }
 
-    getBalanceTransfer(dataAccount) {
+    private getBalanceTransfer(dataAccount) {
         let response: IResponseBalanceTransfer;
         response = {
             origin: {

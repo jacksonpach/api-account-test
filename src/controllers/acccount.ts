@@ -33,18 +33,18 @@ class Account {
         switch (data.type) {
             case 'deposit':
                 result = await service.deposit(data)
-                return this.createResponse(result, response);
+                return Account.createResponse(result, response);
             case 'withdraw':
                 result = await service.withdraw(data)
-                return this.createResponse(result, response);
+                return Account.createResponse(result, response);
             case 'transfer':
                 result = await service.transfer(data)
-                return this.createResponse(result, response);
+                return Account.createResponse(result, response);
         }
 
     }
 
-    createResponse(result, response: Response<any, Record<string, any>>) {
+    private static createResponse(result, response: Response<any, Record<string, any>>) {
         if (result) {
             return response.status(201).json(result)
         } else {
