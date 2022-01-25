@@ -1,10 +1,10 @@
 import {Request, Response} from "express"
 import AccountService from "../services/account";
-import {IEvent, IResponseBalance} from "../models/generics";
+import {IEvent, IResponseBalanceDestination, IResponseBalanceOrigin} from "../models/generics";
 
 class Account {
 
-    async getReset(response: Response){
+    async getReset(response: Response) {
         const body: string = 'OK'
         const success: number = 200
         const service = new AccountService
@@ -28,8 +28,24 @@ class Account {
     async getEvent(request: Request, response: Response) {
         const service = new AccountService
         const data: IEvent = request.body
-        if (data.type == 'deposit') {
-            const result = await service.deposit(data)
+        let result
+
+        switch (data.type) {
+            case 'deposit':
+                result = await service.deposit(data)
+                return this.createResponse(result, response);
+            case 'withdraw':
+                result = await service.withdraw(data)
+                return this.createResponse(result, response);
+            case 'transfer':
+                result = await service.transfer(data)
+                return this.createResponse(result, response);
+        }
+
+    }
+
+    createResponse(result, response: Response<any, Record<string, any>>) {
+        if (result) {
             return response.status(201).json(result)
         } else {
             return response.status(404).json(0)
