@@ -4,8 +4,8 @@ class AccountEntity {
     private type
     private destination
 
-    constructor(obj) {
-        this.id = "100";
+    constructor(obj, id) {
+        this.id = id;
         this.amount = 0;
         this.type = '';
         this.destination = 0;

@@ -5,13 +5,17 @@ class Storage {
 
     constructor() {
         this.redis = new Redis({
-            host: 'redis',
+            host: 'localhost',
             port: '6379'
         });
     }
 
     set(name, value) {
         this.redis.set(name, JSON.stringify(value));
+    }
+
+    reset(){
+        this.redis.del('account_100')
     }
 
     async get(name) {

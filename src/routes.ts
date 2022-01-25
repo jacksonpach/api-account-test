@@ -3,21 +3,20 @@ import Account from "./controllers/acccount";
 
 export const router = Router()
 
-router.post('/reset', (request, response) => {
-        const body: string = 'OK'
-        const success: number = 200
-        response.send(body).status(success)
+router.post('/reset', async (request, response) => {
+        const account = new Account()
+        await account.getReset(response)
     }
 )
 
-router.get('/balance', (request, response) => {
+router.get('/balance', async (request, response) => {
         const account = new Account()
-        account.getBalance(request, response)
+        await account.getBalance(request, response)
     }
 )
 
-router.post('/event', (request, response) => {
+router.post('/event', async (request, response) => {
         const account = new Account()
-        account.getEvent(request, response)
+        return await account.getEvent(request, response)
     }
 )
