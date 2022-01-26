@@ -1,5 +1,4 @@
 import {app} from "./app"
+import {API_PORT} from './config'
 
-const port = 4000
-
-app.listen(port, () => console.log(port))
+app.listen(API_PORT, () => console.log(API_PORT))

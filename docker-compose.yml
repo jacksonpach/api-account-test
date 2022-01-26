@@ -1,28 +1,22 @@
 version: "3.7"
 
 services:
-  webserver:
-    image: nginx:alpine
-    container_name: ${APP}-webserver
-    working_dir: /mnt/api
-    volumes:
-      - ".:/mnt/api"
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "8082:80"
-    depends_on:
-      - nodejs
-
   nodejs:
     build: docker/nodejs
     working_dir: /mnt/api
     container_name: ${APP}-node
     volumes:
       - ".:/mnt/api"
+    ports:
+      - "4003:4000"
+      - "9229:9229"
 
   redis:
     image: redis:alpine
     container_name: ${APP}-redis
+    ports:
+      - "6379:6379"
+
 
   adminredis:
     image: erikdubbelboer/phpredisadmin

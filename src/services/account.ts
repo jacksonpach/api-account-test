@@ -10,7 +10,7 @@ import {
 
 class AccountService {
 
-    async reset() {
+    async resetStorage() {
         const storage = new Storage();
         storage.reset();
     }
@@ -19,27 +19,25 @@ class AccountService {
         let result = await this.existAccount(data.destination)
         if (result === null) {
             return await this.createAccount(data)
-        } else {
-            return await this.addAccount(data)
         }
+        return await this.addAccount(data)
     }
 
     async withdraw(data: IEvent) {
         let result = await this.existAccount(data.origin)
         if (result === null) {
             return false
-        } else {
-            return await this.withDrawAccount(data)
         }
+        return await this.withDrawAccount(data)
     }
 
     async transfer(data: IEvent) {
-        let result = await this.existAccount(data.origin)
-        if (result === null) {
-            return false
-        } else {
-            return await this.withDrawAccount(data)
+        let existOrigin = await this.existAccount(data.origin)
+
+        if (existOrigin) {
+            return await this.transferAccount(data)
         }
+        return false
     }
 
     async getBalance(idAccount) {
@@ -82,10 +80,13 @@ class AccountService {
         const storage = new Storage();
         const accountOriginData = await storage.get('account_' + data.origin)
         const accountDestinationData = await storage.get('account_' + data.destination)
-
         const accountOrigin = new AccountEntity(accountOriginData, data.origin)
         const accountDestination = new AccountEntity(accountDestinationData, data.destination)
+
         accountOrigin.setAmount(accountOrigin.getAmount() - data.amount)
+        accountDestination.setAmount(accountDestination.getAmount() + data.amount)
+
+        return this.getResponseTransfer(accountOrigin, accountDestination)
 
     }
 
@@ -116,16 +117,16 @@ class AccountService {
         return response
     }
 
-    private getBalanceTransfer(dataAccount) {
+    private getResponseTransfer(dataOrigin, dataDestination) {
         let response: IResponseBalanceTransfer;
         response = {
             origin: {
-                id: dataAccount.id,
-                balance: dataAccount.amount
+                id: dataOrigin.id,
+                balance: dataOrigin.amount
             },
             destination: {
-                id: dataAccount.id,
-                balance: dataAccount.amount
+                id: dataDestination.id,
+                balance: dataDestination.amount
             }
         }
         return response
