@@ -9,14 +9,10 @@ services:
       - ".:/mnt/api"
     ports:
       - "4003:4000"
-      - "9229:9229"
 
   redis:
     image: redis:alpine
     container_name: ${APP}-redis
-    ports:
-      - "6379:6379"
-
 
   adminredis:
     image: erikdubbelboer/phpredisadmin
