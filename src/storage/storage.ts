@@ -7,7 +7,7 @@ class Storage {
     constructor() {
         this.redis = new Redis({
             host: REDIS_HOST,
-            port: REDIS_PORT
+            port: 6379
         });
     }
 

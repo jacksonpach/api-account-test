@@ -70,9 +70,15 @@ class AccountService {
         const storage = new Storage();
         const accountData = await storage.get('account_' + data.origin)
         const account = new AccountEntity(accountData, data.origin)
+
         account.setAmount(account.getAmount() - data.amount)
         const idAccount = account.getId()
+
+        if (account.getAmount() < -150) {
+            return false
+        }
         await storage.set('account_' + idAccount, account)
+
         return this.getResponseBalanceOrigin(account)
     }
 
